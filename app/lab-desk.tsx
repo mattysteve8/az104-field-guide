@@ -1,7 +1,6 @@
 'use client';
 
 import { Check, ChevronLeft, ChevronRight, Clock3, FlaskConical, ShieldCheck } from 'lucide-react';
-import { useState } from 'react';
 import styles from './lab-desk.module.css';
 
 export type TenantLab = {
@@ -30,11 +29,10 @@ export const labs: TenantLab[] = [
   { title: 'Observe, alert and recover', time: '60 min', area: 'Monitor & recovery', goal: 'Make a small workload observable with a believable recovery plan.', beforeYouBegin: 'Use a small temporary workload and check any Log Analytics ingestion, alert, vault, and protected-instance costs before enabling them.', tasks: ['Create a Log Analytics workspace and inspect metrics versus logs.', 'Create a metric alert with an action group and review alert processing.', 'Compare Recovery Services and Backup vaults in the portal.', 'Choose a backup policy, identify a restore point, and document validation.'], evidence: 'You can identify the signal an alert evaluates, the action group it calls, and the restore or failover evidence that proves the recovery plan.', pitfall: 'Metrics are numeric time series; logs provide detailed queryable records. Azure Backup restores recovery points, while Site Recovery prepares replicated workloads for failover.', cleanup: 'Remove test alerts/action groups and any protected temporary resources. Follow the vault deletion prerequisites before deleting a vault.', debrief: 'A metric answers “how much, now?” A log explains context. Backup restores; Site Recovery prepares replicated workloads for failover.' },
 ];
 
-export function LabDesk({ doneLabs, onToggle }: { doneLabs: number[]; onToggle: (index: number) => void }) {
-  const [activeIndex, setActiveIndex] = useState(0);
+export function LabDesk({ activeIndex, doneLabs, onSelect, onToggle }: { activeIndex: number; doneLabs: number[]; onSelect: (index: number) => void; onToggle: (index: number) => void }) {
   const lab = labs[activeIndex];
   const reviewed = doneLabs.includes(activeIndex);
-  const choose = (index: number) => setActiveIndex((index + labs.length) % labs.length);
+  const choose = (index: number) => onSelect((index + labs.length) % labs.length);
 
   return <div className={styles.desk}>
     <aside className={styles.rail} aria-label="Tenant lab selection">
